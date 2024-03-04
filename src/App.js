@@ -1,25 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
-function App() {
+const App = () => {
+  const [word, setWord] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Append additional information to the word
+    const appendedWord = `: ${word}, location: s3, repository: port-front-end`;
+
+    // Send the word to the server
+    try {
+      const response = await fetch('https://54.85.47.216:3000/log', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ word: appendedWord }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to log word');
+      }
+
+      console.log('Word logged successfully:', appendedWord);
+    } catch (error) {
+      console.error('Error logging word:', error);
+    }
+
+    // Optionally, reset the form
+    setWord('');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Local</h1>
+      <h2>Word Form</h2>
+      <p>This form will send a message to the front end</p>
+      <br />
+      <form onSubmit={handleSubmit}>
+        <label>Enter Word</label>
+        <input
+          type="text"
+          value={word}
+          onChange={(e) => setWord(e.target.value)}
+          name="word"
+        />
+        <button type="submit">Submit</button>
+      </form>
     </div>
   );
-}
+};
 
 export default App;
