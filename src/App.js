@@ -11,7 +11,7 @@ const App = () => {
 
     // Send the word to the server
     try {
-      const response = await fetch('https://54.85.47.216:3000/log', {
+      const response = await fetch('http://34.227.225.227:3000/log', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
